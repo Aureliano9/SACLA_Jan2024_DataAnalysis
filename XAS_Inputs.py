@@ -29,7 +29,7 @@ RunNumber = 1145445
 
 for i in range(len(BinsSize)):
 	BinSize = BinsSize[i]
-	sorting_tool.sorting_tool(RunNumber,DataDirectory,DataDirectoryTM,SaveFolder,ExtraComment,FemtosecondInPls,TimeZero,Attenuation,BinSize,Bin_Threshold)
+	XAS_sorting_tool.sorting_tool(RunNumber,DataDirectory,DataDirectoryTM,SaveFolder,ExtraComment,FemtosecondInPls,TimeZero,Attenuation,BinSize,Bin_Threshold)
 
 print('done')
 print("--- %s seconds ---" % (time.time() - start_time))
