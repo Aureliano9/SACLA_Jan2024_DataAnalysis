@@ -2,8 +2,8 @@
 import time
 start_time = time.time()
 
-import sorting_tool
-import sorting_tool_simple
+import XAS_sorting_tool
+import XAS_sorting_tool_simple
 import numpy as np
 
 #Select the directory where the file is located, as well as TM data
@@ -29,12 +29,12 @@ RunNumber = 1145445
 
 for i in Attenuation:
 	ExtraComment = i
-	sorting_tool.sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i, BinSize, Bin_Threshold)
-	sorting_tool_simple.sorting_tool_simple(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i)
+	XAS_sorting_tool.sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i, BinSize, Bin_Threshold)
+	XAS_sorting_tool_simple.sorting_tool_simple(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i)
 
 #Full possible inputs:
-#sorting_tool.sorting_tool(RunNumber,DataDirectory,DataDirectoryTM,SaveFolder,ExtraComment,FemtosecondInPls,TimeZero,Attenuation,BinSize,Bin_Threshold)
-#sorting_tool_simple.sorting_tool_simple(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, Attenuation)
+#XAS_sorting_tool.sorting_tool(RunNumber,DataDirectory,DataDirectoryTM,SaveFolder,ExtraComment,FemtosecondInPls,TimeZero,Attenuation,BinSize,Bin_Threshold)
+#XAS_sorting_tool_simple.sorting_tool_simple(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, Attenuation)
 
 print('done')
 print("--- %s seconds ---" % (time.time() - start_time))
