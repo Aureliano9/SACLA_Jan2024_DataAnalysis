@@ -3,6 +3,7 @@
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
                  TimeZero=1375, Attenuation=0, BinSize=25, Bin_Threshold=0):
@@ -166,7 +167,26 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     N_values_off = np.array(N_values_off) 
     N_values_on = np.array(N_values_on) 
     
-       
+    '''
+    create a dictionary and put all the useful arrays into it, then save into a .csv file
+    '''
+    temp_dict=dict()
+    temp_dict['Delays_off'] = Delays_off_time_rebinned
+    temp_dict['I1_off'] = I1_off_time_rebinned
+    temp_dict['I0_1_off'] = I0_1_off_time_rebinned
+    temp_dict['I0_2_off'] = I0_2_off_time_rebinned
+    temp_dict['N_values_off'] = N_values_off
+    temp_dict['Delays_on'] = Delays_on_time_rebinned
+    temp_dict['I1_on'] = I1_on_time_rebinned
+    temp_dict['I0_1_on'] = I0_1_on_time_rebinned
+    temp_dict['I0_2_on'] = I0_2_on_time_rebinned
+    temp_dict['N_values_on'] = N_values_on
+
+    df=pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
+    df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
+    
+    '''   
+    #Old method for saving data, doesn't save properly if arrays are unequal       
     np.savetxt(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', 
                                                        [p for p in zip(Delays_off_time_rebinned, 
                                                         I1_off_time_rebinned,
@@ -179,6 +199,8 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
                                                         I0_2_on_time_rebinned,
                                                         N_values_on)], 
                delimiter=',', header='Delays_off,I1_off,I0_1_off,I0_2_off,N_values_off,Delays_on, I1_on, I0_1_on,I0_2_on,N_values_on')
+    '''
+    
     '''
     plt.plot( Delays_on_time_rebinned, (I1_on_time_rebinned/(I0_1_on_time_rebinned+I0_2_on_time_rebinned)) )
     plt.plot( Delays_off_time_rebinned, (I1_off_time_rebinned/(I0_1_off_time_rebinned+I0_2_off_time_rebinned)) )
