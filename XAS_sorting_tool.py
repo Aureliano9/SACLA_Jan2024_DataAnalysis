@@ -19,8 +19,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     TagList_I = f['/run_' + str(RunNumber) + '/event_info/tag_number_list'][:]
     
     #Import Timing Tool data
-    TM_data = np.genfromtxt(DataDirectoryTM + '/TM_data/' + str(RunNumber) + '.csv'
-        , delimiter=',',skip_header=2)
+    TM_data = np.genfromtxt(DataDirectoryTM + '/TM_data/' + str(RunNumber) + '.csv', delimiter=',',skip_header=2)
     
     '''
     We need to find the tag nubmers of the points which both have a Photodiode measurement
@@ -123,25 +122,25 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
         I1_temp = 0
         I0_1_temp = 0
         I0_2_temp = 0
-				I1_temp_std = []
-   		 	I0_1_temp_std = []
-   			I0_2_temp_std = []
+	I1_temp_std = []
+   	I0_1_temp_std = []
+   	I0_2_temp_std = []
         for hg in range(len(Delays_off)):
             if 0<=Delays_off[hg]-Bins_off[gf]<BinSize:
                 N_values+= 1
                 I1_temp+= I1_off_time[hg,1]
                 I0_1_temp+= I0_1_off_time[hg,1]
                 I0_2_temp+= I0_2_off_time[hg,1]
-           			I1_temp_std.append(I1_off_time[hg,1])
-            		I0_1_temp_std.append(I0_1_off_time[hg,1])
-            		I0_2_temp_std.append(I0_2_off_time[hg,1])								
+           	I1_temp_std.append(I1_off_time[hg,1])
+            	I0_1_temp_std.append(I0_1_off_time[hg,1])
+            	I0_2_temp_std.append(I0_2_off_time[hg,1])								
         if N_values>Bin_Threshold:
             I1_off_time_rebinned.append(I1_temp/N_values)
             I0_1_off_time_rebinned.append(I0_1_temp/N_values)
             I0_2_off_time_rebinned.append(I0_2_temp/N_values)
-	        	I1_off_time_rebinned_std.append(np.std(I1_temp_std)/np.sqrt(N_values))
-        		I0_1_off_time_rebinned_std.append(np.std(I0_1_temp_std)/np.sqrt(N_values))
-        		I0_2_off_time_rebinned_std.append(np.std(I0_2_temp_std)/np.sqrt(N_values))
+	    I1_off_time_rebinned_std.append(np.std(I1_temp_std)/np.sqrt(N_values))
+            I0_1_off_time_rebinned_std.append(np.std(I0_1_temp_std)/np.sqrt(N_values))
+            I0_2_off_time_rebinned_std.append(np.std(I0_2_temp_std)/np.sqrt(N_values))
             Delays_off_time_rebinned.append(Bins_off[gf])
             N_values_off.append(N_values)
             
@@ -150,40 +149,40 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
         I1_temp = 0
         I0_1_temp = 0
         I0_2_temp = 0
-		    I1_temp_std = []
-    		I0_1_temp_std = []
-    		I0_2_temp_std = []
+	I1_temp_std = []
+    	I0_1_temp_std = []
+    	I0_2_temp_std = []
         for hg in range(len(Delays_on)):
             if 0<=Delays_on[hg]-Bins_on[gf]<BinSize:
                 N_values+= 1
                 I1_temp+= I1_on_time[hg,1]
                 I0_1_temp+= I0_1_on_time[hg,1]
                 I0_2_temp+= I0_2_on_time[hg,1]
-						    I1_temp_std.append(I1_on_time[hg,1])
-            		I0_1_temp_std.append(I0_1_on_time[hg,1])
-            		I0_2_temp_std.append(I0_2_on_time[hg,1])
+		I1_temp_std.append(I1_on_time[hg,1])
+            	I0_1_temp_std.append(I0_1_on_time[hg,1])
+            	I0_2_temp_std.append(I0_2_on_time[hg,1])
         if N_values>Bin_Threshold:
             I1_on_time_rebinned.append(I1_temp/N_values)
             I0_1_on_time_rebinned.append(I0_1_temp/N_values)
             I0_2_on_time_rebinned.append(I0_2_temp/N_values)
-			      I1_on_time_rebinned_std.append(np.std(I1_temp_std)/np.sqrt(N_values))
-       		  I0_1_on_time_rebinned_std.append(np.std(I0_1_temp_std)/np.sqrt(N_values))
-       		  I0_2_on_time_rebinned_std.append(np.std(I0_2_temp_std)/np.sqrt(N_values))
+	    I1_on_time_rebinned_std.append(np.std(I1_temp_std)/np.sqrt(N_values))
+       	    I0_1_on_time_rebinned_std.append(np.std(I0_1_temp_std)/np.sqrt(N_values))
+       	    I0_2_on_time_rebinned_std.append(np.std(I0_2_temp_std)/np.sqrt(N_values))
             Delays_on_time_rebinned.append(Bins_on[gf])
             N_values_on.append(N_values)
     
     I1_off_time_rebinned = np.array(I1_off_time_rebinned)
     I0_1_off_time_rebinned = np.array(I0_1_off_time_rebinned)
     I0_2_off_time_rebinned = np.array(I0_2_off_time_rebinned) 
-		I1_off_time_rebinned_std = np.array(I1_off_time_rebinned_std)
-		I0_1_off_time_rebinned_std = np.array(I0_1_off_time_rebinned_std)
-		I0_2_off_time_rebinned_std = np.array(I0_2_off_time_rebinned_std)
+    I1_off_time_rebinned_std = np.array(I1_off_time_rebinned_std)
+    I0_1_off_time_rebinned_std = np.array(I0_1_off_time_rebinned_std)
+    I0_2_off_time_rebinned_std = np.array(I0_2_off_time_rebinned_std)
     I1_on_time_rebinned = np.array(I1_on_time_rebinned)
     I0_1_on_time_rebinned = np.array(I0_1_on_time_rebinned)
     I0_2_on_time_rebinned = np.array(I0_2_on_time_rebinned)
-		I1_on_time_rebinned_std = np.array(I1_on_time_rebinned_std)
-		I0_1_on_time_rebinned_std = np.array(I0_1_on_time_rebinned_std)
-		I0_2_on_time_rebinned_std = np.array(I0_2_on_time_rebinned_std)
+    I1_on_time_rebinned_std = np.array(I1_on_time_rebinned_std)
+    I0_1_on_time_rebinned_std = np.array(I0_1_on_time_rebinned_std)
+    I0_2_on_time_rebinned_std = np.array(I0_2_on_time_rebinned_std)
     Delays_off_time_rebinned = np.array(Delays_off_time_rebinned)
     Delays_on_time_rebinned = np.array(Delays_on_time_rebinned)
     N_values_off = np.array(N_values_off) 
@@ -197,7 +196,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_off'] = I1_off_time_rebinned
     temp_dict['I0_1_off'] = I0_1_off_time_rebinned
     temp_dict['I0_2_off'] = I0_2_off_time_rebinned
-		temp_dict['I1_off_std'] = I1_off_time_rebinned_std
+    temp_dict['I1_off_std'] = I1_off_time_rebinned_std
     temp_dict['I0_1_off_std'] = I0_1_off_time_rebinned_std
     temp_dict['I0_2_off_std'] = I0_2_off_time_rebinned_std
     temp_dict['N_values_off'] = N_values_off
@@ -205,7 +204,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_on'] = I1_on_time_rebinned
     temp_dict['I0_1_on'] = I0_1_on_time_rebinned
     temp_dict['I0_2_on'] = I0_2_on_time_rebinned
-		temp_dict['I1_on_std'] = I1_on_time_rebinned_std
+    temp_dict['I1_on_std'] = I1_on_time_rebinned_std
     temp_dict['I0_1_on_std'] = I0_1_on_time_rebinned_std
     temp_dict['I0_2_on_std'] = I0_2_on_time_rebinned_std
     temp_dict['N_values_on'] = N_values_on
