@@ -122,23 +122,23 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
         I1_temp = 0
         I0_1_temp = 0
         I0_2_temp = 0
-	I1_temp_stderr = []
-   	I0_1_temp_stderr = []
-   	I0_2_temp_stderr = []
+        I1_temp_stderr = []
+        I0_1_temp_stderr = []
+        I0_2_temp_stderr = []
         for hg in range(len(Delays_off)):
             if 0<=Delays_off[hg]-Bins_off[gf]<BinSize:
                 N_values+= 1
                 I1_temp+= I1_off_time[hg,1]
                 I0_1_temp+= I0_1_off_time[hg,1]
                 I0_2_temp+= I0_2_off_time[hg,1]
-           	I1_temp_stderr.append(I1_off_time[hg,1])
-            	I0_1_temp_stderr.append(I0_1_off_time[hg,1])
-            	I0_2_temp_stderr.append(I0_2_off_time[hg,1])								
+                I1_temp_stderr.append(I1_off_time[hg,1])
+                I0_1_temp_stderr.append(I0_1_off_time[hg,1])
+                I0_2_temp_stderr.append(I0_2_off_time[hg,1])								
         if N_values>Bin_Threshold:
             I1_off_time_rebinned.append(I1_temp/N_values)
             I0_1_off_time_rebinned.append(I0_1_temp/N_values)
             I0_2_off_time_rebinned.append(I0_2_temp/N_values)
-	    I1_off_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
+            I1_off_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
             I0_1_off_time_rebinned_stderr.append(np.std(I0_1_temp_stderr)/np.sqrt(N_values))
             I0_2_off_time_rebinned_stderr.append(np.std(I0_2_temp_stderr)/np.sqrt(N_values))
             Delays_off_time_rebinned.append(Bins_off[gf])
@@ -149,25 +149,25 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
         I1_temp = 0
         I0_1_temp = 0
         I0_2_temp = 0
-	I1_temp_stderr = []
-    	I0_1_temp_stderr = []
-    	I0_2_temp_stderr = []
+        I1_temp_stderr = []
+        I0_1_temp_stderr = []
+        I0_2_temp_stderr = []
         for hg in range(len(Delays_on)):
             if 0<=Delays_on[hg]-Bins_on[gf]<BinSize:
                 N_values+= 1
                 I1_temp+= I1_on_time[hg,1]
                 I0_1_temp+= I0_1_on_time[hg,1]
                 I0_2_temp+= I0_2_on_time[hg,1]
-		I1_temp_stderr.append(I1_on_time[hg,1])
-            	I0_1_temp_stderr.append(I0_1_on_time[hg,1])
-            	I0_2_temp_stderr.append(I0_2_on_time[hg,1])
+                I1_temp_stderr.append(I1_on_time[hg,1])
+                I0_1_temp_stderr.append(I0_1_on_time[hg,1])
+                I0_2_temp_stderr.append(I0_2_on_time[hg,1])
         if N_values>Bin_Threshold:
             I1_on_time_rebinned.append(I1_temp/N_values)
             I0_1_on_time_rebinned.append(I0_1_temp/N_values)
             I0_2_on_time_rebinned.append(I0_2_temp/N_values)
-	    I1_on_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
-       	    I0_1_on_time_rebinned_stderr.append(np.std(I0_1_temp_stderr)/np.sqrt(N_values))
-       	    I0_2_on_time_rebinned_stderr.append(np.std(I0_2_temp_stderr)/np.sqrt(N_values))
+            I1_on_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
+            I0_1_on_time_rebinned_stderr.append(np.std(I0_1_temp_stderr)/np.sqrt(N_values))
+            I0_2_on_time_rebinned_stderr.append(np.std(I0_2_temp_stderr)/np.sqrt(N_values))
             Delays_on_time_rebinned.append(Bins_on[gf])
             N_values_on.append(N_values)
     
@@ -220,7 +220,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict2['I1_off'] = I1_off
     temp_dict2['I0_1_off'] = I0_1_off
     temp_dict2['I0_2_off'] = I0_2_off
-    temp_dict2['Delays_on'] = Delays_on        
+    temp_dict2['Delays_on'] = Delays_on
     temp_dict2['I1_on'] = I1_on
     temp_dict2['I0_1_on'] = I0_1_on
     temp_dict2['I0_2_on'] = I0_2_on
@@ -231,7 +231,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
 
        
     '''   
-    #Old method for saving data, doesn't save properly if arrays are unequal       
+    #Old method for saving data, doesn't save properly if arrays are unequal  
     np.savetxt(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', 
                                                        [p for p in zip(Delays_off_time_rebinned, 
                                                         I1_off_time_rebinned,
