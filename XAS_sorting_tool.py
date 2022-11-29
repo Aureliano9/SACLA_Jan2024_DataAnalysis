@@ -214,6 +214,22 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_stderr','I0_1_off_stderr','I0_2_off_stderr','N_values_off','Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_stderr','I0_1_on_stderr','I0_2_on_stderr','N_values_on']]
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
     
+    #same as previous step but now without summing the bins
+    temp_dict2=dict()
+    temp_dict2['Delays_off'] = Delays_off
+    temp_dict2['I1_off'] = I1_off
+    temp_dict2['I0_1_off'] = I0_1_off
+    temp_dict2['I0_2_off'] = I0_2_off
+    temp_dict2['Delays_on'] = Delays_on        
+    temp_dict2['I1_on'] = I1_on
+    temp_dict2['I0_1_on'] = I0_1_on
+    temp_dict2['I0_2_on'] = I0_2_on
+
+    df2 = pd.DataFrame.from_dict(temp_dict2,orient='index').transpose().fillna(' ')
+    df2 = df2[['Delays_off','I1_off','I0_1_off','I0_2_off','Delays_on','I1_on','I0_1_on','I0_2_on']]
+    df2.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'_uncorrected.csv', index=False)
+
+       
     '''   
     #Old method for saving data, doesn't save properly if arrays are unequal       
     np.savetxt(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', 
