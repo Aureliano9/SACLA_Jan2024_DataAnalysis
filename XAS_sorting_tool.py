@@ -29,9 +29,12 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     TM_data_reduced_pixels = [] #For filtered Timing Tool data, values are in pixels
     for fd in range(len(TagList_I)):
         Corresponding_TM_data_index = int((np.where(TM_data[:,0]==TagList_I[fd]))[0])
-        
+        #Check if the data exists in the TM_data, if not, then the empty array is created and discarded
+        DoesDataExist = True
+        if not Corresponding_TM_data_index:
+            DoesDataExist = False
         #Finds the row with the same tag value.
-        if TagList_I[fd] == TM_data[Corresponding_TM_data_index,0]: 
+        if (DoesDataExist == True) and (TagList_I[fd] == TM_data[Corresponding_TM_data_index,0]): 
             TM_data_reduced_pixels.append(TM_data[Corresponding_TM_data_index])
     
     TM_data_reduced_pixels = np.array(TM_data_reduced_pixels)
@@ -53,6 +56,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
         Third condition is to collect the Laser Off status values
         '''
         if ((np.isnan(TM_data_reduced_pixels[sa,2]) == False)
+            and (np.isnan(I1[sa]) == False)
+            and (np.isnan(I0_1[sa]) == False)
+            and (np.isnan(I0_2[sa]) == False)
             and (OpticalAttenuator[sa] == Attenuation) 
             and (LaserStatus[sa] == 0)):
             I1_off.append(I1[sa])
@@ -72,6 +78,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
                               ((1000-TM_data_reduced_pixels[sa,2])*2.6) )
         #Same as above, but Laser On
         elif ((np.isnan(TM_data_reduced_pixels[sa,2]) == False)
+            and (np.isnan(I1[sa]) == False)
+            and (np.isnan(I0_1[sa]) == False)
+            and (np.isnan(I0_2[sa]) == False)
             and (OpticalAttenuator[sa] == Attenuation) 
             and (LaserStatus[sa] == 1)):
             I1_on.append(I1[sa])
