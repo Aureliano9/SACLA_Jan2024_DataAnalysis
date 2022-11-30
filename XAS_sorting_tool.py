@@ -28,7 +28,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     '''
     TM_data_reduced_pixels = [] #For filtered Timing Tool data, values are in pixels
     for fd in range(len(TagList_I)):
-        Corresponding_TM_data_index = int((np.where(TM_data[:,0]==TagList_I[fd]))[0])
+        Corresponding_TM_data_index = (np.where(TM_data[:,0]==TagList_I[fd]))[0]
         #Check if the data exists in the TM_data, if not, then the empty array is created and discarded
         DoesDataExist = True
         if not Corresponding_TM_data_index:
@@ -38,6 +38,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             TM_data_reduced_pixels.append(TM_data[Corresponding_TM_data_index])
     
     TM_data_reduced_pixels = np.array(TM_data_reduced_pixels)
+    TM_data_reduced_pixels = np.squeeze(TM_data_reduced_pixels,axis=1)
     
     #This section applies the Timing Tool correction, and adds extra filtering conditions
     I1_off = []
@@ -48,7 +49,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I0_2_on = []
     Delays_on = []
     Delays_off = []
-    for sa in range(len(I1)):
+    for sa in range(len(TM_data_reduced_pixels[:,0])):
         '''
         First condition filters out NaN values in column 2, which is timing edge fit;
         Change to column 1 ([sa,1]) to use timing edge derivative.
