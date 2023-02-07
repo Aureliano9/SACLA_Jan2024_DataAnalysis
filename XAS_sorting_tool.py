@@ -13,6 +13,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
+    I_OpticalLaser = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_4_in_volt'][:]    
     OpticalAttenuator = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_ND_filter_stage_position'][:]
     OpticalDelay = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_delay_stage_position'][:]
     LaserStatus = f['/run_' + str(RunNumber) + '/event_info/bl_3/lh_1/laser_pulse_selector_status'][:]
@@ -61,7 +62,10 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             and (np.isnan(I0_1[sa]) == False)
             and (np.isnan(I0_2[sa]) == False)
             and (OpticalAttenuator[sa] == Attenuation) 
-            and (LaserStatus[sa] == 0)):
+            and (LaserStatus[sa] == 0)
+            and (0.9>I1[sa]>0.01)
+            and (0.9>I0_1[sa]>0.01)
+            and (0.9>I0_2[sa]>0.01)):          
             I1_off.append(I1[sa])
             I0_1_off.append(I0_1[sa])
             I0_2_off.append(I0_2[sa])
@@ -83,7 +87,10 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             and (np.isnan(I0_1[sa]) == False)
             and (np.isnan(I0_2[sa]) == False)
             and (OpticalAttenuator[sa] == Attenuation) 
-            and (LaserStatus[sa] == 1)):
+            and (LaserStatus[sa] == 1)
+            and (0.9>I1[sa]>0.01)
+            and (0.9>I0_1[sa]>0.01)
+            and (0.9>I0_2[sa]>0.01)):
             I1_on.append(I1[sa])
             I0_1_on.append(I0_1[sa])
             I0_2_on.append(I0_2[sa])
@@ -123,7 +130,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     Delays_on_time_rebinned = []
     N_values_off = []
     N_values_on = []
-
+    I1_I0_2_covariance_off = []
+    I1_I0_2_covariance_on = []
+    
     Bins_on = list(range(-620, int(max(Delays_on))+BinSize, BinSize))
     Bins_off = Bins_on
     
@@ -143,7 +152,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
                 I0_2_temp+= I0_2_off_time[hg,1]
                 I1_temp_stderr.append(I1_off_time[hg,1])
                 I0_1_temp_stderr.append(I0_1_off_time[hg,1])
-                I0_2_temp_stderr.append(I0_2_off_time[hg,1])								
+                I0_2_temp_stderr.append(I0_2_off_time[hg,1])
         if N_values>Bin_Threshold:
             I1_off_time_rebinned.append(I1_temp/N_values)
             I0_1_off_time_rebinned.append(I0_1_temp/N_values)
@@ -151,6 +160,8 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_off_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
             I0_1_off_time_rebinned_stderr.append(np.std(I0_1_temp_stderr)/np.sqrt(N_values))
             I0_2_off_time_rebinned_stderr.append(np.std(I0_2_temp_stderr)/np.sqrt(N_values))
+            covariance_temp = np.cov(I1_temp_stderr,I0_2_temp_stderr)
+            I1_I0_2_covariance_off.append(covariance_temp[1,0])
             Delays_off_time_rebinned.append(Bins_off[gf])
             N_values_off.append(N_values)
             
@@ -178,6 +189,8 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_on_time_rebinned_stderr.append(np.std(I1_temp_stderr)/np.sqrt(N_values))
             I0_1_on_time_rebinned_stderr.append(np.std(I0_1_temp_stderr)/np.sqrt(N_values))
             I0_2_on_time_rebinned_stderr.append(np.std(I0_2_temp_stderr)/np.sqrt(N_values))
+            covariance_temp = np.cov(I1_temp_stderr,I0_2_temp_stderr)
+            I1_I0_2_covariance_on.append(covariance_temp[1,0])            
             Delays_on_time_rebinned.append(Bins_on[gf])
             N_values_on.append(N_values)
     
@@ -187,12 +200,14 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I1_off_time_rebinned_stderr = np.array(I1_off_time_rebinned_stderr)
     I0_1_off_time_rebinned_stderr = np.array(I0_1_off_time_rebinned_stderr)
     I0_2_off_time_rebinned_stderr = np.array(I0_2_off_time_rebinned_stderr)
+    I1_I0_2_covariance_off = np.array(I1_I0_2_covariance_off)
     I1_on_time_rebinned = np.array(I1_on_time_rebinned)
     I0_1_on_time_rebinned = np.array(I0_1_on_time_rebinned)
     I0_2_on_time_rebinned = np.array(I0_2_on_time_rebinned)
     I1_on_time_rebinned_stderr = np.array(I1_on_time_rebinned_stderr)
     I0_1_on_time_rebinned_stderr = np.array(I0_1_on_time_rebinned_stderr)
     I0_2_on_time_rebinned_stderr = np.array(I0_2_on_time_rebinned_stderr)
+    I1_I0_2_covariance_on = np.array(I1_I0_2_covariance_on)
     Delays_off_time_rebinned = np.array(Delays_off_time_rebinned)
     Delays_on_time_rebinned = np.array(Delays_on_time_rebinned)
     N_values_off = np.array(N_values_off) 
@@ -209,6 +224,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_off_stderr'] = I1_off_time_rebinned_stderr
     temp_dict['I0_1_off_stderr'] = I0_1_off_time_rebinned_stderr
     temp_dict['I0_2_off_stderr'] = I0_2_off_time_rebinned_stderr
+    
     temp_dict['N_values_off'] = N_values_off
     temp_dict['Delays_on'] = Delays_on_time_rebinned
     temp_dict['I1_on'] = I1_on_time_rebinned
