@@ -224,7 +224,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_off_stderr'] = I1_off_time_rebinned_stderr
     temp_dict['I0_1_off_stderr'] = I0_1_off_time_rebinned_stderr
     temp_dict['I0_2_off_stderr'] = I0_2_off_time_rebinned_stderr
-    
+    temp_dict['I1_I0_2_covariance_off'] = I1_I0_2_covariance_off
     temp_dict['N_values_off'] = N_values_off
     temp_dict['Delays_on'] = Delays_on_time_rebinned
     temp_dict['I1_on'] = I1_on_time_rebinned
@@ -233,11 +233,12 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_on_stderr'] = I1_on_time_rebinned_stderr
     temp_dict['I0_1_on_stderr'] = I0_1_on_time_rebinned_stderr
     temp_dict['I0_2_on_stderr'] = I0_2_on_time_rebinned_stderr
+    temp_dict['I1_I0_2_covariance_on'] = I1_I0_2_covariance_on
     temp_dict['N_values_on'] = N_values_on
 
     #reindex randomly saved columns
     df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
-    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_stderr','I0_1_off_stderr','I0_2_off_stderr','N_values_off','Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_stderr','I0_1_on_stderr','I0_2_on_stderr','N_values_on']]
+    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_stderr','I0_1_off_stderr','I0_2_off_stderr','I1_I0_2_covariance_off','N_values_off','Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_stderr','I0_1_on_stderr','I0_2_on_stderr','I1_I0_2_covariance_on','N_values_on']]
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
     
     #same as previous step but now without summing the bins
