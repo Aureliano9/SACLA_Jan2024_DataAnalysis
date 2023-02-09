@@ -9,7 +9,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
                  TimeZero=1375, Attenuation=0, BinSize=25, Bin_Threshold=0):
     
     #Import detector data etc from HDF5 file
-    f = h5py.File(DataDirectory + 'XAS_' + str(RunNumber) + '.h5', 'r')
+    f = h5py.File(DataDirectory + str(RunNumber) + '.h5', 'r')
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
@@ -235,13 +235,13 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     
     #Calculate final TFY and its standard deviation according to error propagation rules
     dqdx = 1 / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)
-    dqdx = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
+    dqdy = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
     dqdz = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
     TFY_on = I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)
     TFY_on_std = (dqdx*I1_on_time_rebinned_std)**2 + (dqdy*I0_1_on_time_rebinned_std)**2 + (dqdz*I0_2_on_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_on) + (2*dqdx*dqdz*I1_I0_2_covariance_on) + (2*dqdy*dqdz*I0_1_I0_2_covariance_on)
 
     dqdx = 1 / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
-    dqdx = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
+    dqdy = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
     dqdz = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
     TFY_off = I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
     TFY_off_std = (dqdx*I1_off_time_rebinned_std)**2 + (dqdy*I0_1_off_time_rebinned_std)**2 + (dqdz*I0_2_off_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_off) + (2*dqdx*dqdz*I1_I0_2_covariance_off) + (2*dqdy*dqdz*I0_1_I0_2_covariance_off)
