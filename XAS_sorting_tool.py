@@ -166,8 +166,12 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_off_time_rebinned_std.append(np.std(I1_temp))
             I0_1_off_time_rebinned_std.append(np.std(I0_1_temp))
             I0_2_off_time_rebinned_std.append(np.std(I0_2_temp))
-            covariance_temp = np.cov(I1_temp,I0_2_temp)
-            I1_I0_2_covariance_off.append(covariance_temp[1,0])
+            I1_I0_1_covariance_off.append(np.cov(I1_temp,I0_1_temp)[1,0])
+            I1_I0_2_covariance_off.append(np.cov(I1_temp,I0_2_temp)[1,0])
+            I0_1_I0_2_covariance_off.append(np.cov(I0_1_temp,I0_2_temp)[1,0])
+            I1_I0_1_covariance_norm_off.append(np.corrcoef(I1_temp,I0_1_temp)[1,0])
+            I1_I0_2_covariance_norm_off.append(np.corrcoef(I1_temp,I0_2_temp)[1,0])
+            I0_1_I0_2_covariance_norm_off.append(np.corrcoef(I0_1_temp,I0_2_temp)[1,0])
             Delays_off_time_rebinned.append(Bins_off[gf])
             N_values_off.append(N_values)
             
@@ -189,8 +193,12 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_on_time_rebinned_std.append(np.std(I1_temp))
             I0_1_on_time_rebinned_std.append(np.std(I0_1_temp))
             I0_2_on_time_rebinned_std.append(np.std(I0_2_temp))
-            covariance_temp = np.cov(I1_temp,I0_2_temp)
-            I1_I0_2_covariance_on.append(covariance_temp[1,0])            
+            I1_I0_1_covariance_on.append(np.cov(I1_temp,I0_1_temp)[1,0])
+            I1_I0_2_covariance_on.append(np.cov(I1_temp,I0_2_temp)[1,0])
+            I0_1_I0_2_covariance_on.append(np.cov(I0_1_temp,I0_2_temp)[1,0])
+            I1_I0_1_covariance_norm_on.append(np.corrcoef(I1_temp,I0_1_temp)[1,0])
+            I1_I0_2_covariance_norm_on.append(np.corrcoef(I1_temp,I0_2_temp)[1,0])
+            I0_1_I0_2_covariance_norm_on.append(np.corrcoef(I0_1_temp,I0_2_temp)[1,0])
             Delays_on_time_rebinned.append(Bins_on[gf])
             N_values_on.append(N_values)
     
@@ -200,14 +208,26 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I1_off_time_rebinned_std = np.array(I1_off_time_rebinned_std)
     I0_1_off_time_rebinned_std = np.array(I0_1_off_time_rebinned_std)
     I0_2_off_time_rebinned_std = np.array(I0_2_off_time_rebinned_std)
+    I1_I0_1_covariance_off = np.array(I1_I0_1_covariance_off)
     I1_I0_2_covariance_off = np.array(I1_I0_2_covariance_off)
+    I0_1_I0_2_covariance_off = np.array(I0_1_I0_2_covariance_off)
+    I1_I0_1_covariance_norm_off = np.array(I1_I0_1_covariance_norm_off)
+    I1_I0_2_covariance_norm_off = np.array(I1_I0_2_covariance_norm_off)
+    I0_1_I0_2_covariance_norm_off = np.array(I0_1_I0_2_covariance_norm_off)
+    
     I1_on_time_rebinned = np.array(I1_on_time_rebinned)
     I0_1_on_time_rebinned = np.array(I0_1_on_time_rebinned)
     I0_2_on_time_rebinned = np.array(I0_2_on_time_rebinned)
     I1_on_time_rebinned_std = np.array(I1_on_time_rebinned_std)
     I0_1_on_time_rebinned_std = np.array(I0_1_on_time_rebinned_std)
     I0_2_on_time_rebinned_std = np.array(I0_2_on_time_rebinned_std)
+    I1_I0_1_covariance_on = np.array(I1_I0_1_covariance_on)
     I1_I0_2_covariance_on = np.array(I1_I0_2_covariance_on)
+    I0_1_I0_2_covariance_on = np.array(I0_1_I0_2_covariance_on)
+    I1_I0_1_covariance_norm_on = np.array(I1_I0_1_covariance_norm_on)
+    I1_I0_2_covariance_norm_on = np.array(I1_I0_2_covariance_norm_on)
+    I0_1_I0_2_covariance_norm_on = np.array(I0_1_I0_2_covariance_norm_on)
+    
     Delays_off_time_rebinned = np.array(Delays_off_time_rebinned)
     Delays_on_time_rebinned = np.array(Delays_on_time_rebinned)
     N_values_off = np.array(N_values_off) 
@@ -224,8 +244,14 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_off_std'] = I1_off_time_rebinned_std
     temp_dict['I0_1_off_std'] = I0_1_off_time_rebinned_std
     temp_dict['I0_2_off_std'] = I0_2_off_time_rebinned_std
+    temp_dict['I1_I0_1_covariance_off'] = I1_I0_1_covariance_off
     temp_dict['I1_I0_2_covariance_off'] = I1_I0_2_covariance_off
+    temp_dict['I0_1_I0_2_covariance_off'] = I0_1_I0_2_covariance_off
+    temp_dict['I1_I0_1_covariance_norm_off'] = I1_I0_1_covariance_norm_off
+    temp_dict['I1_I0_2_covariance_norm_off'] = I1_I0_2_covariance_norm_off
+    temp_dict['I0_1_I0_2_covariance_norm_off'] = I0_1_I0_2_covariance_norm_off
     temp_dict['N_values_off'] = N_values_off
+    
     temp_dict['Delays_on'] = Delays_on_time_rebinned
     temp_dict['I1_on'] = I1_on_time_rebinned
     temp_dict['I0_1_on'] = I0_1_on_time_rebinned
@@ -233,12 +259,22 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_on_std'] = I1_on_time_rebinned_std
     temp_dict['I0_1_on_std'] = I0_1_on_time_rebinned_std
     temp_dict['I0_2_on_std'] = I0_2_on_time_rebinned_std
+    temp_dict['I1_I0_1_covariance_on'] = I1_I0_1_covariance_on
     temp_dict['I1_I0_2_covariance_on'] = I1_I0_2_covariance_on
+    temp_dict['I0_1_I0_2_covariance_on'] = I0_1_I0_2_covariance_on
+    temp_dict['I1_I0_1_covariance_norm_on'] = I1_I0_1_covariance_norm_on
+    temp_dict['I1_I0_2_covariance_norm_on'] = I1_I0_2_covariance_norm_on
+    temp_dict['I0_1_I0_2_covariance_norm_on'] = I0_1_I0_2_covariance_norm_on
     temp_dict['N_values_on'] = N_values_on
 
     #reindex randomly saved columns
     df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
-    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std','I1_I0_2_covariance_off','N_values_off','Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std','I1_I0_2_covariance_on','N_values_on']]
+    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std',
+             'I1_I0_1_covariance_off','I1_I0_2_covariance_off','I0_1_I0_2_covariance_off',
+             'I1_I0_1_covariance_norm_off','I1_I0_2_covariance_norm_off','I0_1_I0_2_covariance_norm_off','N_values_off',
+             'Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std',
+             'I1_I0_1_covariance_on','I1_I0_2_covariance_on','I0_1_I0_2_covariance_on',
+             'I1_I0_1_covariance_norm_on','I1_I0_2_covariance_norm_on','I0_1_I0_2_covariance_norm_on','N_values_on']]
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
     
     #same as previous step but now without summing the bins
