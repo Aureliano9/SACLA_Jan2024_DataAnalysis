@@ -97,7 +97,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             Delays_on.append( ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) + 
                               ((1000-TM_data_reduced_pixels[sa,2])*2.6) )        
     
-    # #Convert into numpy arrays for usefulness
+    # Convert into numpy arrays for usefulness
     # I1_off = np.array(I1_off)
     # I1_on = np.array(I1_on)
     # I0_1_off = np.array(I0_1_off)
@@ -233,6 +233,21 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     N_values_off = np.array(N_values_off) 
     N_values_on = np.array(N_values_on) 
     
+    #Calculate final TFY and its standard deviation according to error propagation rules
+    dqdx = 1 / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)
+    dqdx = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
+    dqdz = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
+    TFY_on = I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)
+    TFY_on_std = (dqdx*I1_on_time_rebinned_std)**2 + (dqdy*I0_1_on_time_rebinned_std)**2 + (dqdz*I0_2_on_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_on) + (2*dqdx*dqdz*I1_I0_2_covariance_on) + (2*dqdy*dqdz*I0_1_I0_2_covariance_on)
+
+    dqdx = 1 / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
+    dqdx = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
+    dqdz = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
+    TFY_off = I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
+    TFY_off_std = (dqdx*I1_off_time_rebinned_std)**2 + (dqdy*I0_1_off_time_rebinned_std)**2 + (dqdz*I0_2_off_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_off) + (2*dqdx*dqdz*I1_I0_2_covariance_off) + (2*dqdy*dqdz*I0_1_I0_2_covariance_off)
+
+    
+    
     '''
     create a dictionary and put all the useful arrays into it, then save into a .csv file
     '''
@@ -250,6 +265,8 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_I0_1_covariance_norm_off'] = I1_I0_1_covariance_norm_off
     temp_dict['I1_I0_2_covariance_norm_off'] = I1_I0_2_covariance_norm_off
     temp_dict['I0_1_I0_2_covariance_norm_off'] = I0_1_I0_2_covariance_norm_off
+    temp_dict['TFY_off'] = TFY_off
+    temp_dict['TFY_off_std'] = TFY_off_std
     temp_dict['N_values_off'] = N_values_off
     
     temp_dict['Delays_on'] = Delays_on_time_rebinned
@@ -265,16 +282,20 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     temp_dict['I1_I0_1_covariance_norm_on'] = I1_I0_1_covariance_norm_on
     temp_dict['I1_I0_2_covariance_norm_on'] = I1_I0_2_covariance_norm_on
     temp_dict['I0_1_I0_2_covariance_norm_on'] = I0_1_I0_2_covariance_norm_on
+    temp_dict['TFY_on'] = TFY_on
+    temp_dict['TFY_on_std'] = TFY_on_std
     temp_dict['N_values_on'] = N_values_on
 
     #reindex randomly saved columns
     df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
     df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std',
              'I1_I0_1_covariance_off','I1_I0_2_covariance_off','I0_1_I0_2_covariance_off',
-             'I1_I0_1_covariance_norm_off','I1_I0_2_covariance_norm_off','I0_1_I0_2_covariance_norm_off','N_values_off',
+             'I1_I0_1_covariance_norm_off','I1_I0_2_covariance_norm_off','I0_1_I0_2_covariance_norm_off',
+             'TFY_off','TFY_off_std','N_values_off',
              'Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std',
              'I1_I0_1_covariance_on','I1_I0_2_covariance_on','I0_1_I0_2_covariance_on',
-             'I1_I0_1_covariance_norm_on','I1_I0_2_covariance_norm_on','I0_1_I0_2_covariance_norm_on','N_values_on']]
+             'I1_I0_1_covariance_norm_on','I1_I0_2_covariance_norm_on','I0_1_I0_2_covariance_norm_on',
+             'TFY_on','TFY_on_std','N_values_on']]
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
     
     #same as previous step but now without summing the bins
