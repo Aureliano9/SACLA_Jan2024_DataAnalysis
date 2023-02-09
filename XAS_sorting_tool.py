@@ -120,76 +120,76 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I1_off_time_rebinned_std = []
     I0_1_off_time_rebinned_std = []
     I0_2_off_time_rebinned_std = []
+    I1_I0_1_covariance_off = []
+    I1_I0_2_covariance_off = []
+    I0_1_I0_2_covariance_off = []
+    I1_I0_1_covariance_norm_off = []
+    I1_I0_2_covariance_norm_off = []
+    I0_1_I0_2_covariance_norm_off = []
+    
     I1_on_time_rebinned = []
     I0_1_on_time_rebinned = []
     I0_2_on_time_rebinned = []
     I1_on_time_rebinned_std = []
     I0_1_on_time_rebinned_std = []
     I0_2_on_time_rebinned_std = []
+    I1_I0_1_covariance_on = []
+    I1_I0_2_covariance_on = []
+    I0_1_I0_2_covariance_on = []
+    I1_I0_1_covariance_norm_on = []
+    I1_I0_2_covariance_norm_on = []
+    I0_1_I0_2_covariance_norm_on = []
+    
     Delays_off_time_rebinned = []
     Delays_on_time_rebinned = []
     N_values_off = []
     N_values_on = []
-    I1_I0_2_covariance_off = []
-    I1_I0_2_covariance_on = []
     
     Bins_on = list(range(-620, int(max(Delays_on))+BinSize, BinSize))
     Bins_off = Bins_on
     
     for gf in range(len(Bins_off)):
         N_values = 0
-        I1_temp = 0
-        I0_1_temp = 0
-        I0_2_temp = 0
-        I1_temp_std = []
-        I0_1_temp_std = []
-        I0_2_temp_std = []
+        I1_temp = []
+        I0_1_temp = []
+        I0_2_temp = []
         for hg in range(len(Delays_off)):
             if 0<=Delays_off[hg]-Bins_off[gf]<BinSize:
                 N_values+= 1
-                I1_temp+= I1_off_time[hg,1]
-                I0_1_temp+= I0_1_off_time[hg,1]
-                I0_2_temp+= I0_2_off_time[hg,1]
-                I1_temp_std.append(I1_off_time[hg,1])
-                I0_1_temp_std.append(I0_1_off_time[hg,1])
-                I0_2_temp_std.append(I0_2_off_time[hg,1])
+                I1_temp.append(I1_off_time[hg,1])
+                I0_1_temp.append(I0_1_off_time[hg,1])
+                I0_2_temp.append(I0_2_off_time[hg,1])
         if N_values>Bin_Threshold:
-            I1_off_time_rebinned.append(I1_temp/N_values)
-            I0_1_off_time_rebinned.append(I0_1_temp/N_values)
-            I0_2_off_time_rebinned.append(I0_2_temp/N_values)
-            I1_off_time_rebinned_std.append(np.std(I1_temp_std))
-            I0_1_off_time_rebinned_std.append(np.std(I0_1_temp_std))
-            I0_2_off_time_rebinned_std.append(np.std(I0_2_temp_std))
-            covariance_temp = np.cov(I1_temp_std,I0_2_temp_std)
+            I1_off_time_rebinned.append(np.mean(I1_temp))
+            I0_1_off_time_rebinned.append(np.mean(I0_1_temp))
+            I0_2_off_time_rebinned.append(np.mean(I0_2_temp))
+            I1_off_time_rebinned_std.append(np.std(I1_temp))
+            I0_1_off_time_rebinned_std.append(np.std(I0_1_temp))
+            I0_2_off_time_rebinned_std.append(np.std(I0_2_temp))
+            covariance_temp = np.cov(I1_temp,I0_2_temp)
             I1_I0_2_covariance_off.append(covariance_temp[1,0])
             Delays_off_time_rebinned.append(Bins_off[gf])
             N_values_off.append(N_values)
             
     for gf in range(len(Bins_on)):
         N_values = 0
-        I1_temp = 0
-        I0_1_temp = 0
-        I0_2_temp = 0
         I1_temp_std = []
         I0_1_temp_std = []
         I0_2_temp_std = []
         for hg in range(len(Delays_on)):
             if 0<=Delays_on[hg]-Bins_on[gf]<BinSize:
                 N_values+= 1
-                I1_temp+= I1_on_time[hg,1]
-                I0_1_temp+= I0_1_on_time[hg,1]
-                I0_2_temp+= I0_2_on_time[hg,1]
-                I1_temp_std.append(I1_on_time[hg,1])
-                I0_1_temp_std.append(I0_1_on_time[hg,1])
-                I0_2_temp_std.append(I0_2_on_time[hg,1])
+                I1_temp.append(I1_on_time[hg,1])
+                I0_1_temp.append(I0_1_on_time[hg,1])
+                I0_2_temp.append(I0_2_on_time[hg,1])
         if N_values>Bin_Threshold:
-            I1_on_time_rebinned.append(I1_temp/N_values)
-            I0_1_on_time_rebinned.append(I0_1_temp/N_values)
-            I0_2_on_time_rebinned.append(I0_2_temp/N_values)
-            I1_on_time_rebinned_std.append(np.std(I1_temp_std))
-            I0_1_on_time_rebinned_std.append(np.std(I0_1_temp_std))
-            I0_2_on_time_rebinned_std.append(np.std(I0_2_temp_std))
-            covariance_temp = np.cov(I1_temp_std,I0_2_temp_std)
+            I1_on_time_rebinned.append(np.mean(I1_temp))
+            I0_1_on_time_rebinned.append(np.mean(I0_1_temp))
+            I0_2_on_time_rebinned.append(np.mean(I0_2_temp))
+            I1_on_time_rebinned_std.append(np.std(I1_temp))
+            I0_1_on_time_rebinned_std.append(np.std(I0_1_temp))
+            I0_2_on_time_rebinned_std.append(np.std(I0_2_temp))
+            covariance_temp = np.cov(I1_temp,I0_2_temp)
             I1_I0_2_covariance_on.append(covariance_temp[1,0])            
             Delays_on_time_rebinned.append(Bins_on[gf])
             N_values_on.append(N_values)
