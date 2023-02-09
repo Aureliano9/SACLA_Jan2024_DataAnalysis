@@ -177,9 +177,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             
     for gf in range(len(Bins_on)):
         N_values = 0
-        I1_temp_std = []
-        I0_1_temp_std = []
-        I0_2_temp_std = []
+        I1_temp = []
+        I0_1_temp = []
+        I0_2_temp = []
         for hg in range(len(Delays_on)):
             if 0<=Delays_on[hg]-Bins_on[gf]<BinSize:
                 N_values+= 1
