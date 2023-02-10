@@ -166,9 +166,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_off_time_rebinned_std.append(np.std(I1_temp))
             I0_1_off_time_rebinned_std.append(np.std(I0_1_temp))
             I0_2_off_time_rebinned_std.append(np.std(I0_2_temp))
-            I1_I0_1_covariance_off.append(np.cov(I1_temp,I0_1_temp)[1,0])
-            I1_I0_2_covariance_off.append(np.cov(I1_temp,I0_2_temp)[1,0])
-            I0_1_I0_2_covariance_off.append(np.cov(I0_1_temp,I0_2_temp)[1,0])
+            I1_I0_1_covariance_off.append(np.cov(I1_temp,I0_1_temp,bias=True)[1,0])
+            I1_I0_2_covariance_off.append(np.cov(I1_temp,I0_2_temp,bias=True)[1,0])
+            I0_1_I0_2_covariance_off.append(np.cov(I0_1_temp,I0_2_temp,bias=True)[1,0])
             I1_I0_1_covariance_norm_off.append(np.corrcoef(I1_temp,I0_1_temp)[1,0])
             I1_I0_2_covariance_norm_off.append(np.corrcoef(I1_temp,I0_2_temp)[1,0])
             I0_1_I0_2_covariance_norm_off.append(np.corrcoef(I0_1_temp,I0_2_temp)[1,0])
@@ -193,9 +193,9 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_on_time_rebinned_std.append(np.std(I1_temp))
             I0_1_on_time_rebinned_std.append(np.std(I0_1_temp))
             I0_2_on_time_rebinned_std.append(np.std(I0_2_temp))
-            I1_I0_1_covariance_on.append(np.cov(I1_temp,I0_1_temp)[1,0])
-            I1_I0_2_covariance_on.append(np.cov(I1_temp,I0_2_temp)[1,0])
-            I0_1_I0_2_covariance_on.append(np.cov(I0_1_temp,I0_2_temp)[1,0])
+            I1_I0_1_covariance_on.append(np.cov(I1_temp,I0_1_temp,bias=True)[1,0])
+            I1_I0_2_covariance_on.append(np.cov(I1_temp,I0_2_temp,bias=True)[1,0])
+            I0_1_I0_2_covariance_on.append(np.cov(I0_1_temp,I0_2_temp,bias=True)[1,0])
             I1_I0_1_covariance_norm_on.append(np.corrcoef(I1_temp,I0_1_temp)[1,0])
             I1_I0_2_covariance_norm_on.append(np.corrcoef(I1_temp,I0_2_temp)[1,0])
             I0_1_I0_2_covariance_norm_on.append(np.corrcoef(I0_1_temp,I0_2_temp)[1,0])
@@ -239,13 +239,14 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     dqdz = - I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)**2
     TFY_on = I1_on_time_rebinned / (I0_1_on_time_rebinned + I0_2_on_time_rebinned)
     TFY_on_std = (dqdx*I1_on_time_rebinned_std)**2 + (dqdy*I0_1_on_time_rebinned_std)**2 + (dqdz*I0_2_on_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_on) + (2*dqdx*dqdz*I1_I0_2_covariance_on) + (2*dqdy*dqdz*I0_1_I0_2_covariance_on)
-
+    TFY_on_std = np.sqrt(TFY_on_std)
+    
     dqdx = 1 / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
     dqdy = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
     dqdz = - I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)**2
     TFY_off = I1_off_time_rebinned / (I0_1_off_time_rebinned + I0_2_off_time_rebinned)
     TFY_off_std = (dqdx*I1_off_time_rebinned_std)**2 + (dqdy*I0_1_off_time_rebinned_std)**2 + (dqdz*I0_2_off_time_rebinned_std)**2 + (2*dqdx*dqdy*I1_I0_1_covariance_off) + (2*dqdx*dqdz*I1_I0_2_covariance_off) + (2*dqdy*dqdz*I0_1_I0_2_covariance_off)
-
+    TFY_off_std = np.sqrt(TFY_off_std)
     
     
     '''
