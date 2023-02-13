@@ -6,10 +6,12 @@ import numpy as np
 import pandas as pd
 
 #Select the Run Number and the directory where the file is located
-RunNumber = np.array(np.arange(1145439,1145444,1))
-DataDirectory = 'C:/Users/nurekeye/Desktop/Projects/SACLA_05-2022/DataAnalysisTry/soap/XAS_Kinetics/'
+DataDirectory = '/home/nurekeyev/nurekeyev/CustomDataConverter/XAS_Feb09_2023/'
+SaveFolder = '/home/nurekeyev/nurekeyev/SavedResults/2023_02_13_b/'
 
-#Set some initial parameters
+RunNumber = np.array(range(1145356,1145448,1))
+
+#Set some variables
 I1_total = []
 I0_1_total = []
 I0_2_total = []
@@ -41,7 +43,7 @@ for i in RunNumber:
     
 df = pd.DataFrame(list(zip(I1_total,I0_1_total,I0_2_total,I_OL_total,OpticalAttenuator_total,LaserStatus_total,TagList_total)),
                   columns=['I1','I0_1','I0_2','I_OL','OpticalAttenuator','LaserStatus','TagList'])
-df.to_csv('IntensityOverTime',index=False)
+df.to_csv(str(SaveFolder) + 'IntensityOverTime.csv',index=False)
 
 #plots
 #df2 = df.dropna()
