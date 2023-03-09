@@ -116,9 +116,30 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     I1_on = np.array(I1_on)
     I0_1_on = np.array(I0_1_on)
     I0_2_on = np.array(I0_2_on)
+    I1_on_std = np.array(I1_on_std)
+    I0_1_on_std = np.array(I0_1_on_std)
+    I0_2_on_std = np.array(I0_2_on_std)
+    I1_I0_1_covariance_on = np.array(I1_I0_1_covariance_on)
+    I1_I0_2_covariance_on = np.array(I1_I0_2_covariance_on)
+    I0_1_I0_2_covariance_on = np.array(I0_1_I0_2_covariance_on)
+    I1_I0_1_covariance_norm_on = np.array(I1_I0_1_covariance_norm_on)
+    I1_I0_2_covariance_norm_on = np.array(I1_I0_2_covariance_norm_on)
+    I0_1_I0_2_covariance_norm_on = np.array(I0_1_I0_2_covariance_norm_on)
+    N_values_on = np.array(N_values_on)
+
     I1_off = np.array(I1_off)
     I0_1_off = np.array(I0_1_off)
     I0_2_off = np.array(I0_2_off)
+    I1_off_std = np.array(I1_off_std)
+    I0_1_off_std = np.array(I0_1_off_std)
+    I0_2_off_std = np.array(I0_2_off_std)
+    I1_I0_1_covariance_off = np.array(I1_I0_1_covariance_off)
+    I1_I0_2_covariance_off = np.array(I1_I0_2_covariance_off)
+    I0_1_I0_2_covariance_off = np.array(I0_1_I0_2_covariance_off)
+    I1_I0_1_covariance_norm_off = np.array(I1_I0_1_covariance_norm_off)
+    I1_I0_2_covariance_norm_off = np.array(I1_I0_2_covariance_norm_off)
+    I0_1_I0_2_covariance_norm_off = np.array(I0_1_I0_2_covariance_norm_off)
+    N_values_off = np.array(N_values_off)
 
     #Calculate final TFY and its standard deviation according to error propagation rules
     dqdx = 1 / (I0_1_on + I0_2_on)
@@ -137,11 +158,39 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
 
     Energy = MonochromatorAngles*(-6.33896967e-03) + 2.68470859e+04
 
-    # np.savetxt('dataaaa.csv', [p for p in zip((MonochromatorAngles), 
-    #                                           (I1_On_ave/(I0_1_On_ave+I0_2_On_ave)), 
-    #                                           (I1_Off_ave/(I0_1_Off_ave+I0_2_Off_ave)))], 
-    #                                           delimiter=',')
-
+    '''
+    create a dictionary and put all the useful arrays into it, then save into a .csv file
+    '''
+    temp_dict=dict()
+    temp_dict['Delays_off'] = Delays_off_time_rebinned
+    temp_dict['I1_off'] = I1_off_time_rebinned
+    temp_dict['I0_1_off'] = I0_1_off_time_rebinned
+    temp_dict['I0_2_off'] = I0_2_off_time_rebinned
+    temp_dict['I1_off_std'] = I1_off_time_rebinned_std
+    temp_dict['I0_1_off_std'] = I0_1_off_time_rebinned_std
+    temp_dict['I0_2_off_std'] = I0_2_off_time_rebinned_std
+    temp_dict['I1_I0_1_covariance_off'] = I1_I0_1_covariance_off
+    temp_dict['I1_I0_2_covariance_off'] = I1_I0_2_covariance_off
+    temp_dict['I0_1_I0_2_covariance_off'] = I0_1_I0_2_covariance_off
+    temp_dict['I1_I0_1_covariance_norm_off'] = I1_I0_1_covariance_norm_off
+    temp_dict['I1_I0_2_covariance_norm_off'] = I1_I0_2_covariance_norm_off
+    temp_dict['I0_1_I0_2_covariance_norm_off'] = I0_1_I0_2_covariance_norm_off
+    temp_dict['TFY_off'] = TFY_off
+    temp_dict['TFY_off_std'] = TFY_off_std
+    temp_dict['N_values_off'] = N_values_off
+    
+    #reindex randomly saved columns
+    df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
+    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std',
+             'I1_I0_1_covariance_off','I1_I0_2_covariance_off','I0_1_I0_2_covariance_off',
+             'I1_I0_1_covariance_norm_off','I1_I0_2_covariance_norm_off','I0_1_I0_2_covariance_norm_off',
+             'TFY_off','TFY_off_std','N_values_off',
+             'Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std',
+             'I1_I0_1_covariance_on','I1_I0_2_covariance_on','I0_1_I0_2_covariance_on',
+             'I1_I0_1_covariance_norm_on','I1_I0_2_covariance_norm_on','I0_1_I0_2_covariance_norm_on',
+             'TFY_on','TFY_on_std','N_values_on']]
+    df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
+    
     # plt.figure(1)
     # plt.errorbar( Energy, TFY_on, yerr=TFY_on_std )
     # plt.plot( MonochromatorAngles, TFY_on )
