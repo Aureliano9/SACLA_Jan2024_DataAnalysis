@@ -2,23 +2,18 @@
 
 
 def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
-                 TimeZero=1375, Attenuation=0, BinSize=25, Bin_Threshold=0):
-
-
-
-    #Set some initial parameters
-    PlsInFemtosecond = 6.671 #Femtosends in 1 pls
-    TimeZero = 1375 #estimated Time zero in pls
+                 TimeZero=1375, Attenuation=0):
 
     f = h5py.File(DataDirectory + 'XAS_' + str(RunNumber) + '.h5', 'r')
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
+    I_OpticalLaser = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_4_in_volt'][:]
     OpticalAttenuator = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_ND_filter_stage_position'][:]
-    OpticalDelay = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_ND_filter_stage_position'][:]
     MonochromatorAngle = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_1/eh_1_CC1_rotational_stage_position'][:]
     LaserStatus = f['/run_' + str(RunNumber) + '/event_info/bl_3/lh_1/laser_pulse_selector_status'][:]
-
+    TagList_I = f['/run_' + str(RunNumber) + '/event_info/tag_number_list'][:]
+    
     MonochromatorAngles = np.array(sorted(list(set(MonochromatorAngle)))) #Find out Angle values
 
     #Create empty arrays for detector values
@@ -57,7 +52,15 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
         I0_1_on_temp = []
         I0_2_on_temp = []
         for k in range(len(LaserStatus)):
-            if (MonochromatorAngle[k] == MonochromatorAngles[ds]) and (LaserStatus[k] == 1):
+            if ( (MonochromatorAngle[k] == MonochromatorAngles[ds])
+                and (LaserStatus[k] == 1)
+                and (OpticalAttenuator[k] == Attenuation)
+                and (np.isnan(I1[k]) == False)
+                and (np.isnan(I0_1[k]) == False)
+                and (np.isnan(I0_2[k]) == False) 
+                and (0.9>I1[k]>0.01)
+                and (0.9>I0_1[k]>0.01)
+                and (0.9>I0_2[k]>0.01) ):
                 N_values_on_temp+= 1
                 I1_on_temp.append(I1[k])
                 I0_1_on_temp.append(I0_1[k])
@@ -76,14 +79,21 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
         I0_1_I0_2_covariance_norm_on.append(np.corrcoef(I0_1_on_temp,I0_2_on_temp)[1,0])
         N_values_on.append(N_values_on_temp)        
 
-
         #sum over LaserOFF shots
         N_values_off_temp = 0
         I1_off_temp = []
         I0_1_off_temp = []
         I0_2_off_temp = []
         for l in range(len(LaserStatus)):
-            if (MonochromatorAngle[l] == MonochromatorAngles[ds]) and (LaserStatus[l] == 0):
+            if ( (MonochromatorAngle[l] == MonochromatorAngles[ds])
+                and (LaserStatus[l] == 0)
+                and (OpticalAttenuator[k] == Attenuation)
+                and (np.isnan(I1[l]) == False)
+                and (np.isnan(I0_1[l]) == False)
+                and (np.isnan(I0_2[l]) == False) 
+                and (0.9>I1[l]>0.01)
+                and (0.9>I0_1[l]>0.01)
+                and (0.9>I0_2[l]>0.01) ):            
                 N_values_off_temp+= 1
                 I1_off_temp.append(I1[l])
                 I0_1_off_temp.append(I0_1[l])
@@ -101,7 +111,6 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
         I1_I0_2_covariance_norm_off.append(np.corrcoef(I1_off_temp,I0_2_off_temp)[1,0])
         I0_1_I0_2_covariance_norm_off.append(np.corrcoef(I0_1_off_temp,I0_2_off_temp)[1,0])
         N_values_off.append(N_values_off_temp)
-
 
     #Convert into numpy arrays for usefulness
     I1_on = np.array(I1_on)
