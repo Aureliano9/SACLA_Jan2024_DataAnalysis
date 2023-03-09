@@ -162,13 +162,13 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     create a dictionary and put all the useful arrays into it, then save into a .csv file
     '''
     temp_dict=dict()
-    temp_dict['Delays_off'] = Delays_off_time_rebinned
-    temp_dict['I1_off'] = I1_off_time_rebinned
-    temp_dict['I0_1_off'] = I0_1_off_time_rebinned
-    temp_dict['I0_2_off'] = I0_2_off_time_rebinned
-    temp_dict['I1_off_std'] = I1_off_time_rebinned_std
-    temp_dict['I0_1_off_std'] = I0_1_off_time_rebinned_std
-    temp_dict['I0_2_off_std'] = I0_2_off_time_rebinned_std
+    temp_dict['Energy_off'] = Energy
+    temp_dict['I1_off'] = I1_off
+    temp_dict['I0_1_off'] = I0_1_off
+    temp_dict['I0_2_off'] = I0_2_off
+    temp_dict['I1_off_std'] = I1_off
+    temp_dict['I0_1_off_std'] = I0_1_off
+    temp_dict['I0_2_off_std'] = I0_2_off
     temp_dict['I1_I0_1_covariance_off'] = I1_I0_1_covariance_off
     temp_dict['I1_I0_2_covariance_off'] = I1_I0_2_covariance_off
     temp_dict['I0_1_I0_2_covariance_off'] = I0_1_I0_2_covariance_off
@@ -179,17 +179,45 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     temp_dict['TFY_off_std'] = TFY_off_std
     temp_dict['N_values_off'] = N_values_off
     
+    temp_dict['Energy_on'] = Energy
+    temp_dict['I1_on'] = I1_on
+    temp_dict['I0_1_on'] = I0_1_on
+    temp_dict['I0_2_on'] = I0_2_on
+    temp_dict['I1_on_std'] = I1_on
+    temp_dict['I0_1_on_std'] = I0_1_on
+    temp_dict['I0_2_on_std'] = I0_2_on
+    temp_dict['I1_I0_1_covariance_on'] = I1_I0_1_covariance_on
+    temp_dict['I1_I0_2_covariance_on'] = I1_I0_2_covariance_on
+    temp_dict['I0_1_I0_2_covariance_on'] = I0_1_I0_2_covariance_on
+    temp_dict['I1_I0_1_covariance_norm_on'] = I1_I0_1_covariance_norm_on
+    temp_dict['I1_I0_2_covariance_norm_on'] = I1_I0_2_covariance_norm_on
+    temp_dict['I0_1_I0_2_covariance_norm_on'] = I0_1_I0_2_covariance_norm_on
+    temp_dict['TFY_on'] = TFY_on
+    temp_dict['TFY_on_std'] = TFY_on_std
+    temp_dict['N_values_on'] = N_values_on
+    
     #reindex randomly saved columns
     df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
-    df = df[['Delays_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std',
+    df = df[['Energy_off','I1_off','I0_1_off','I0_2_off','I1_off_std','I0_1_off_std','I0_2_off_std',
              'I1_I0_1_covariance_off','I1_I0_2_covariance_off','I0_1_I0_2_covariance_off',
              'I1_I0_1_covariance_norm_off','I1_I0_2_covariance_norm_off','I0_1_I0_2_covariance_norm_off',
              'TFY_off','TFY_off_std','N_values_off',
-             'Delays_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std',
+             'Energy_on','I1_on','I0_1_on','I0_2_on','I1_on_std','I0_1_on_std','I0_2_on_std',
              'I1_I0_1_covariance_on','I1_I0_2_covariance_on','I0_1_I0_2_covariance_on',
              'I1_I0_1_covariance_norm_on','I1_I0_2_covariance_norm_on','I0_1_I0_2_covariance_norm_on',
              'TFY_on','TFY_on_std','N_values_on']]
-    df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', index=False)
+    df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(ExtraComment) +'.csv', index=False)
+    
+    temp_dict2=dict()
+    temp_dict2['Energy_off'] = Energy
+    temp_dict2['I1_off'] = I1_off
+    temp_dict2['I0_1_off'] = I0_1_off
+    temp_dict2['I0_2_off'] = I0_2_off
+    
+    temp_dict2['Energy_on'] = Energy
+    temp_dict2['I1_on'] = I1_on
+    temp_dict2['I0_1_on'] = I0_1_on
+    temp_dict2['I0_2_on'] = I0_2_on
     
     # plt.figure(1)
     # plt.errorbar( Energy, TFY_on, yerr=TFY_on_std )
