@@ -1,7 +1,7 @@
 #This code is for plotting XAS spectra from SACLA beamtime
 
 
-def sorting_tool_simple(RunNumber, DataDirectory, DataDirectoryTM, ExtraComment, FemtosecondInPls=6.671, 
+def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
                  TimeZero=1375, Attenuation=0, BinSize=25, Bin_Threshold=0):
 
 
