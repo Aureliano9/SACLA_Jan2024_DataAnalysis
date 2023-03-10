@@ -23,15 +23,20 @@ BinSize = 25 #Set the bin size for rebinning in fs
 Bin_Threshold = 0 
 
 #Select an optical attenuator value. 0 for 5 uJ of laser energy, -2500 for 2.9 uJ
-Attenuation = np.array([0, -2500])
+Attenuation = 0
 # Select the Run Number, in a loop if needed. WHen using range function, last point isn't included, but first point is
+RunNumber = np.array([1145374,1145375,1145376,1145377,1145378,1145381,1145382,1145383,1145384,
+		      1145385,1145387,1145388,1145411,1145436,1145437,1145438,1145439,1145440,1145441,1145442,1145443,1145444,1145445,1145446]) #5 uJ runs
+
+RunNumber = np.array([1145374,1145375,1145376,1145377,1145378,1145379,1145380,1145381,1145382,1145383,1145384,1145385,
+		      1145387,1145389,1145409,1145410,1145436,1145437,1145438,1145439,1145440,1145441,1145442,1145443,1145444,1145445,1145446]) #2.9 uJ runs
+
 RunNumber = np.array(range(1145436,1145448,1))
 #RunNumber = np.array([1145436])
 for k in RunNumber:
-	for i in Attenuation:
-		ExtraComment = i
-		XAS_sorting_tool.sorting_tool(k, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i, BinSize, Bin_Threshold)
-		XAS_sorting_tool_simple.sorting_tool_simple(k, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, i)
+    ExtraComment = Attenuation
+    XAS_sorting_tool.sorting_tool(k, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, Attenuation, BinSize, Bin_Threshold)
+    XAS_sorting_tool_simple.sorting_tool_simple(k, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, Attenuation)
 
 #Full possible inputs:
 #XAS_sorting_tool.sorting_tool(RunNumber,DataDirectory,DataDirectoryTM,SaveFolder,ExtraComment,FemtosecondInPls,TimeZero,Attenuation,BinSize,Bin_Threshold)
