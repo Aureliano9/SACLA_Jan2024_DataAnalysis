@@ -209,15 +209,20 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(ExtraComment) +'.csv', index=False)
     
     temp_dict2=dict()
-    temp_dict2['Energy_off'] = Energy
-    temp_dict2['I1_off'] = I1_off
-    temp_dict2['I0_1_off'] = I0_1_off
-    temp_dict2['I0_2_off'] = I0_2_off
-    
-    temp_dict2['Energy_on'] = Energy
-    temp_dict2['I1_on'] = I1_on
-    temp_dict2['I0_1_on'] = I0_1_on
-    temp_dict2['I0_2_on'] = I0_2_on
+    temp_dict2['Energy_off'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y<0.5 else None), (MonochromatorAngle*(-6.33896967e-03) + 2.68470859e+04) ,LaserStatus ) ) ) ) )
+    temp_dict2['I1_off'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y<0.5 else None), I1,LaserStatus ) ) ) ) )
+    temp_dict2['I0_1_off'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y<0.5 else None), I0_1,LaserStatus ) ) ) ) )
+    temp_dict2['I0_2_off'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y<0.5 else None), I0_2,LaserStatus ) ) ) ) )
+
+    temp_dict2['Energy_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), (MonochromatorAngle*(-6.33896967e-03) + 2.68470859e+04) ,LaserStatus ) ) ) ) )
+    temp_dict2['I1_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), I1,LaserStatus ) ) ) ) )
+    temp_dict2['I0_1_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), I0_1,LaserStatus ) ) ) ) )
+    temp_dict2['I0_2_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), I0_2,LaserStatus ) ) ) ) )
+
+    df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
+    df = df[['Energy_off','I1_off','I0_1_off','I0_2_off',
+             'Energy_on','I1_on','I0_1_on','I0_2_on']]
+    df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(ExtraComment) +'_raw.csv', index=False)
     
     # plt.figure(1)
     # plt.errorbar( Energy, TFY_on, yerr=TFY_on_std )
