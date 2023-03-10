@@ -219,7 +219,7 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     temp_dict2['I0_1_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), I0_1,LaserStatus ) ) ) ) )
     temp_dict2['I0_2_on'] = np.array( list( filter( lambda x: x is not None, list( map( ( lambda x,y: x if y>0.5 else None), I0_2,LaserStatus ) ) ) ) )
 
-    df = pd.DataFrame.from_dict(temp_dict,orient='index').transpose().fillna(' ')
+    df = pd.DataFrame.from_dict(temp_dict2,orient='index').transpose().fillna(' ')
     df = df[['Energy_off','I1_off','I0_1_off','I0_2_off',
              'Energy_on','I1_on','I0_1_on','I0_2_on']]
     df.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(ExtraComment) +'_raw.csv', index=False)
