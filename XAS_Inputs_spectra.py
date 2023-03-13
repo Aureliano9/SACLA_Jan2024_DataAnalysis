@@ -1,13 +1,9 @@
 #Input Parameters
 import time
 start_time = time.time()
-
-import spectra_extractor
-import matplotlib.pyplot as plt
+from XAS_spectra import spectra_extractor
 import numpy as np
-import pandas as pd
-import csv
-from collections import defaultdict
+
 
 
 #Select the directory where the file is located
@@ -29,9 +25,8 @@ RunNumber = np.array([1145372,1145373,1145391,1145393,1145397,1145398,1145399,11
 #RunNumber = np.array(range(1145436,1145448,1))
 #RunNumber = np.array([1145436])
 for k in RunNumber:
-	for i in Attenuation:
-		ExtraComment = i
-		spectra_extractor(k, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls=6.671, TimeZero=1375, Attenuation=i)
+	ExtraComment = Attenuation
+	spectra_extractor(k, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls, TimeZero, Attenuation)
 
 print('done')
 print("--- %s seconds ---" % (time.time() - start_time))
