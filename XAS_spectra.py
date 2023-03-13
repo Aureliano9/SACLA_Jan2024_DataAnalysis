@@ -1,10 +1,14 @@
 #This code is for plotting XAS spectra from SACLA beamtime
-
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import csv
+from collections import defaultdict
 
 def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
                  TimeZero=1375, Attenuation=0):
 
-    f = h5py.File(DataDirectory + 'XAS_' + str(RunNumber) + '.h5', 'r')
+    f = h5py.File(DataDirectory + str(RunNumber) + '.h5', 'r')
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
