@@ -18,6 +18,20 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
     LaserStatus = f['/run_' + str(RunNumber) + '/event_info/bl_3/lh_1/laser_pulse_selector_status'][:]
     TagList_I = f['/run_' + str(RunNumber) + '/event_info/tag_number_list'][:]
     
+    ''' Activate this section only for run 1145398. It has 2 optical delays (4373 and 61336), so it has to be sorted over them. 
+    OpticalDelay = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_delay_stage_position'][:]
+    filter_arr = OpticalDelay > 5000
+    new_arr =  OpticalDelay[filter_arr] 
+    I1 = I1[filter_arr]
+    I0_1 = I0_1[filter_arr]
+    I0_2 = I0_2[filter_arr]
+    I_OpticalLaser = I_OpticalLaser[filter_arr]
+    OpticalAttenuator = OpticalAttenuator[filter_arr]
+    MonochromatorAngle = MonochromatorAngle[filter_arr]
+    LaserStatus = LaserStatus[filter_arr]
+    TagList_I = TagList_I[filter_arr]
+    '''
+    
     MonochromatorAngles = np.array(sorted(list(set(MonochromatorAngle)))) #Find out Angle values
 
     #Create empty arrays for detector values
