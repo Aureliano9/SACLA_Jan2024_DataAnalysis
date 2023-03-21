@@ -105,7 +105,7 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment, Femtos
         for l in range(len(LaserStatus)):
             if ( (MonochromatorAngle[l] == MonochromatorAngles[ds])
                 and (LaserStatus[l] == 0)
-                and (OpticalAttenuator[k] == Attenuation)
+                and (OpticalAttenuator[l] == Attenuation)
                 and (np.isnan(I1[l]) == False)
                 and (np.isnan(I0_1[l]) == False)
                 and (np.isnan(I0_2[l]) == False) 
