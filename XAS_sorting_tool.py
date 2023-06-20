@@ -78,9 +78,13 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             be changed at the whim. A quote form Katayama et al. (2016):
             'The positive direction in the relative time indicates the earlier 
             irradiation of x-rays with respect to the optical lasers.'
+            Also, since the grid is uneven, everythong above 1250 fs is not timing-tool corrected.
             '''
-            Delays_off.append( ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) + 
-                              ((1000-TM_data_reduced_pixels[sa,2])*2.6) )
+            if ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) < 1250:
+                Delays_off.append( ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) + 
+                                  ((1000-TM_data_reduced_pixels[sa,2])*2.6) )
+            else:
+                Delays_off.append( (OpticalDelay[sa]-TimeZero)*FemtosecondInPls )
         #Same as above, but Laser On
         elif ((np.isnan(TM_data_reduced_pixels[sa,2]) == False)
             and (np.isnan(I1[sa]) == False)
@@ -94,8 +98,11 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             I1_on.append(I1[sa])
             I0_1_on.append(I0_1[sa])
             I0_2_on.append(I0_2[sa])
-            Delays_on.append( ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) + 
-                              ((1000-TM_data_reduced_pixels[sa,2])*2.6) )        
+            if ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) < 1250:
+                Delays_on.append( ((OpticalDelay[sa]-TimeZero)*FemtosecondInPls) + 
+                                  ((1000-TM_data_reduced_pixels[sa,2])*2.6) )
+            else:
+                Delays_on.append( (OpticalDelay[sa]-TimeZero)*FemtosecondInPls )
     
     # Convert into numpy arrays for usefulness
     # I1_off = np.array(I1_off)
