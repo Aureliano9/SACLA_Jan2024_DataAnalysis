@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
-                 TimeZero=1375, Attenuation=0, BinSize=25, Bin_Threshold=0):
+                 TimeZero=1375, BinSize=25, Bin_Threshold=0):
     
     #Import detector data etc from HDF5 file
     f = h5py.File(DataDirectory + str(RunNumber) + '.h5', 'r')
@@ -14,7 +14,6 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
     I_OpticalLaser = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_4_in_volt'][:]    
-    OpticalAttenuator = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_ND_filter_stage_position'][:]
     OpticalDelay = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/eh_2_optical_delay_stage_position'][:]
     LaserStatus = f['/run_' + str(RunNumber) + '/event_info/bl_3/lh_1/laser_pulse_selector_status'][:]
     TagList_I = f['/run_' + str(RunNumber) + '/event_info/tag_number_list'][:]
@@ -52,16 +51,17 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     Delays_off = []
     for sa in range(len(TM_data_reduced_pixels[:,0])):
         '''
-        First condition filters out NaN values in column 2, which is timing edge fit;
-        Change to column 1 ([sa,1]) to use timing edge derivative.
-        Second condition is for the optical attenuator value.
-        Third condition is to collect the Laser Off status values
+        First condition filters out NaN values of timing tool data,
+        which is in column 2, which is timing tool edge fit;
+        change to column 1 ([sa,1]) to use timing tool edge derivative instead.
+        Conditions 2, 3, 4 filter out NaN values of sample and reference photodiodes. 
+        Conditions 5 collects the Laser Off status values.
+        Conditions 6, 7, 8 select the phodotiode values within indicated range.
         '''
         if ((np.isnan(TM_data_reduced_pixels[sa,2]) == False)
             and (np.isnan(I1[sa]) == False)
             and (np.isnan(I0_1[sa]) == False)
             and (np.isnan(I0_2[sa]) == False)
-            and (OpticalAttenuator[sa] == Attenuation) 
             and (LaserStatus[sa] == 0)
             and (0.9>I1[sa]>0.01)
             and (0.9>I0_1[sa]>0.01)
@@ -90,7 +90,6 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
             and (np.isnan(I1[sa]) == False)
             and (np.isnan(I0_1[sa]) == False)
             and (np.isnan(I0_2[sa]) == False)
-            and (OpticalAttenuator[sa] == Attenuation) 
             and (LaserStatus[sa] == 1)
             and (0.9>I1[sa]>0.01)
             and (0.9>I0_1[sa]>0.01)
@@ -321,30 +320,3 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
     df2 = df2[['Delays_off','I1_off','I0_1_off','I0_2_off','Delays_on','I1_on','I0_1_on','I0_2_on']]
     df2.to_csv(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'_uncorrected.csv', index=False)
 
-       
-    '''   
-    #Old method for saving data, doesn't save properly if arrays are unequal  
-    np.savetxt(str(SaveFolder) + str(RunNumber) + '_' + str(BinSize) + 'fs_' + str(ExtraComment) +'.csv', 
-                                                       [p for p in zip(Delays_off_time_rebinned, 
-                                                        I1_off_time_rebinned,
-                                                        I0_1_off_time_rebinned,
-                                                        I0_2_off_time_rebinned,
-                                                        N_values_off,
-                                                        Delays_on_time_rebinned,
-                                                        I1_on_time_rebinned,
-                                                        I0_1_on_time_rebinned,
-                                                        I0_2_on_time_rebinned,
-                                                        N_values_on)], 
-               delimiter=',', header='Delays_off,I1_off,I0_1_off,I0_2_off,N_values_off,Delays_on, I1_on, I0_1_on,I0_2_on,N_values_on')
-    '''
-    
-    '''
-    plt.plot( Delays_on_time_rebinned, (I1_on_time_rebinned/(I0_1_on_time_rebinned+I0_2_on_time_rebinned)) )
-    plt.plot( Delays_off_time_rebinned, (I1_off_time_rebinned/(I0_1_off_time_rebinned+I0_2_off_time_rebinned)) )
-    plt.xlabel('Time (fs)')
-    plt.ylabel('Intensity (a.u.)')
-    plt.legend(['Laser ON', 'Laser OFF'])
-    
-    plt.xlim([-600, 800])
-    plt.ylim([0,60])
-    '''
