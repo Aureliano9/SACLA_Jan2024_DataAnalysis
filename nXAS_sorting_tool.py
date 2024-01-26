@@ -9,7 +9,7 @@ def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraCom
                  TimeZero=1375, BinSize=25, Bin_Threshold=0):
     
     #Import detector data etc from HDF5 file
-    f = h5py.File(DataDirectory + str(RunNumber) + '.h5', 'r')
+    f = h5py.File(DataDirectory + 'XAS_' + str(RunNumber) + '.h5', 'r')
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
     I0_1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_14_in_volt'][:]
     I0_2 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_15_in_volt'][:]
