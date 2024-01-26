@@ -4,10 +4,12 @@ import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import os
 
 def sorting_tool(RunNumber, DataDirectory, DataDirectoryTM, SaveFolder, ExtraComment, FemtosecondInPls=6.671, 
                  TimeZero=1375, BinSize=25, Bin_Threshold=0):
-    
+
+    os.mkdir(SaveFolder+str(Run_Number))
     #Import detector data etc from HDF5 file
     f = h5py.File(DataDirectory + 'XAS_' + str(RunNumber) + '.h5', 'r')
     I1 = f['/run_' + str(RunNumber) + '/event_info/bl_3/eh_2/photodiode/photodiode_user_13_in_volt'][:]
