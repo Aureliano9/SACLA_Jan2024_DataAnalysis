@@ -5,11 +5,11 @@ import pandas as pd
 Directory ='C:/Users/nurekeye/Desktop/Projects/SACLA_05-2022/DataAnalysis/2023_06_21/'
 Save_Directory ='C:/Users/nurekeye/Desktop/Projects/SACLA_01-2024/plot/'
 
-Runs = np.array([1145439]) #1st min, 5 uJ, hor
+Runs = np.array([1145439])
 
 # Create empty dictionaries to fill them with Pandas DataFrames, each key corresponds to a run
-data = {} #5 uJ timing tool corrected
-datau = {} #5 uJ uncorrected
+data = {} #timing tool corrected
+datau = {} #uncorrected
 
 for i in Runs:
     # i=1145442
