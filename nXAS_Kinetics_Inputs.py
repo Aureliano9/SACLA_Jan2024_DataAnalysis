@@ -2,8 +2,7 @@
 import time
 start_time = time.time()
 
-import XAS_sorting_tool
-import XAS_sorting_tool_simple
+import nXAS_sorting_tool
 import numpy as np
 
 #Select the directory where the file is located, as well as TM data and saveing folder
