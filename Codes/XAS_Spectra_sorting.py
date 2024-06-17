@@ -156,7 +156,7 @@ def spectra_extractor(RunNumber, DataDirectory, SaveFolder, ExtraComment):
     TFY_off_std = np.sqrt(TFY_off_std)
 
     #Energy = MonochromatorAngles*(-8.82902e-4) + 10133.244
-    Energy = np.round( (6.626*10**-34) * (2.998*10**8) * (10**9) / ((1.602*10**-19) * 0.1 * (2*3.1355604444554) * np.sin(MonochromatorAngles*np.pi*4*10**-6 / 180) ), decimals=0 )
+    Energy = np.round( (6.626*10**-34) * (2.998*10**8) * (10**9) / ((1.602*10**-19) * 0.1 * (2*3.1355604444554) * np.sin(MonochromatorAngles*np.pi*4*10**-6 / 180) ), decimals=2 )
    
     '''
     create a dictionary and put all the useful arrays into it, then save into a .csv file
